@@ -3,17 +3,30 @@ package cafeboard.Post;
 import cafeboard.Board.Board;
 import cafeboard.Comment.Comment;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String postcontent;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     private Board board;
@@ -32,6 +45,7 @@ public class Post {
         this.board = board;
     }
 
+
     public Long getId() {
         return id;
     }
@@ -43,6 +57,7 @@ public class Post {
     public String getPostcontent() {
         return postcontent;
     }
+
 
     public void setTitle(String title) {
         this.title = title;

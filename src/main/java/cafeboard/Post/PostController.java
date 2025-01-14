@@ -2,6 +2,8 @@ package cafeboard.Post;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class PostController {
 
@@ -19,18 +21,27 @@ public class PostController {
 
     //수정
     @PutMapping("/posts/{postId}")
-    public Post update(@PathVariable Long id, @RequestBody CreatePostRequest request){
-        Post post = postService.update(id,request);
+    public Post update(@PathVariable Long postId, @RequestBody CreatePostRequest request){
+        Post post = postService.update(postId,request);
         return post;
     }
 
     //목록조회
+    @GetMapping("/posts")
+    public List<PostResponse> findAllposts(){
+        return postService.fingAll();
+    }
 
     //상세조회
+    @GetMapping("/posts/{postId}")
+    public PostDetailResponse findDetailpost(@PathVariable Long postId){
+        return postService.findDetail(postId);
+    }
+
 
     //삭제
     @DeleteMapping("/posts/{postId}")
-    public void delete(@PathVariable Long id){
-        postService.delete(id);
+    public void delete(@PathVariable Long postId){
+        postService.delete(postId);
     }
 }

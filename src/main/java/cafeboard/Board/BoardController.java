@@ -15,14 +15,14 @@ public class BoardController {
 
     //생성
     @PostMapping("/boards")
-    public void create(CreateBoardRequest request){
+    public void create(@RequestBody CreateBoardRequest request){
         boardService.create(request);
     }
 
     //수정
     @PutMapping("/boards/{boardId}")
-    public Board updateBoard(@PathVariable Long id, @RequestBody CreateBoardRequest request){
-        Board updatedboard = boardService.update(id,request);
+    public Board updateBoard(@PathVariable Long boardId, @RequestBody CreateBoardRequest request){
+        Board updatedboard = boardService.update(boardId,request);
         return updatedboard;
     }
 
@@ -32,9 +32,16 @@ public class BoardController {
         return boardService.findAll();
     }
 
+    //특정 게시판의 게시글 목록 조회
+    @GetMapping("/boards/{boardId}")
+    public BoardDetailResponse findDetail(@PathVariable Long boardId){
+        return boardService.findDetail(boardId);
+    }
+
+
     //삭제
     @DeleteMapping("/boards/{boardId}")
-    public void delete(@PathVariable Long id){
-        boardService.delete(id);
+    public void delete(@PathVariable Long boardId){
+        boardService.delete(boardId);
     }
 }

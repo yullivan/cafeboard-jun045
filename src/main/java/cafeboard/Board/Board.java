@@ -1,5 +1,6 @@
 package cafeboard.Board;
 
+import cafeboard.Post.Post;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -18,10 +19,10 @@ public class Board {
     private String boardName;
 
     @CreatedDate
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private LocalDateTime updatedAt;
 
     protected Board() {
     }
@@ -30,6 +31,7 @@ public class Board {
         this.boardName = boardName;
     }
 
+    //getter
     public Long getId() {
         return id;
     }
@@ -38,8 +40,17 @@ public class Board {
         return boardName;
     }
 
+    //setter
     public void setBoardName(String boardName) {
         this.boardName = boardName;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }
 
