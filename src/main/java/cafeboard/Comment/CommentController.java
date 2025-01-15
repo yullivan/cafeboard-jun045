@@ -19,14 +19,14 @@ public class CommentController {
 
     //수정
     @PutMapping("/comments/{commentId}")
-    public Comment update(@PathVariable Long id, @RequestBody CreateCommentRequest request){
-        Comment comment = commentService.update(id,request);
+    public Comment update(@PathVariable Long commentId, @RequestBody CreateCommentRequest request){
+        Comment comment = commentService.update(commentId,request);
         return comment;
     }
 
     //삭제
     @DeleteMapping("/comments/{commentId}")
-    public void delete(@PathVariable Long id, @RequestBody CreateCommentRequest request){
-        commentService.delete(id);
+    public void delete(@PathVariable Long commentId){
+        commentService.delete(commentId);
     }
 }
