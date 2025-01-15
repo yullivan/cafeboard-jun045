@@ -2,6 +2,7 @@ package cafeboard.Post;
 
 import cafeboard.Board.Board;
 import cafeboard.Comment.Comment;
+import cafeboard.Memeber.Member;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -29,8 +30,13 @@ public class Post {
     private LocalDateTime updatedAt;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Board board;
     //생성자 같이 만들어줘야함
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Member writer;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
@@ -39,10 +45,11 @@ public class Post {
     protected Post() {
     }
 
-    public Post(String title, String postcontent,Board board) {
+    public Post(String title, String postcontent,Board board, Member writer) {
         this.title = title;
         this.postcontent = postcontent;
         this.board = board;
+        this.writer = writer;
     }
 
 
@@ -58,6 +65,9 @@ public class Post {
         return postcontent;
     }
 
+    public Member getWriter() {
+        return writer;
+    }
 
     public void setTitle(String title) {
         this.title = title;

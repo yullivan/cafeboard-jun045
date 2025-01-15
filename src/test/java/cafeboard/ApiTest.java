@@ -2,6 +2,7 @@ package cafeboard;
 
 import cafeboard.Board.CreateBoardRequest;
 import cafeboard.Comment.CreateCommentRequest;
+import cafeboard.Memeber.CreateMemberRequest;
 import cafeboard.Post.CreatePostRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -114,9 +115,21 @@ public class ApiTest {
 
         Long boardId = 1L;  // 테스트 환경에서 사용될 boardId 값 (이미 생성된 게시판 ID)
 
+        // 회원 생성 (writerId = 1L로 미리 등록된 회원)
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new CreatePostRequest("게시글1","가나라다", boardId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
+                .body(new CreateMemberRequest("loginid1234", "password", "testNick"))
+                .when()
+                .post("/members")
+                .then().log().all()
+                .statusCode(200);
+
+        //회원 ID 설정 (테스트 환경에서 사용될 writerId 값)
+        Long writerId = 1L; // 실제로는 테스트 중인 회원 ID를 설정해줘야 함
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new CreatePostRequest("게시글1","가나라다", boardId, writerId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
                 .when()
                 .post("/posts")  // POST 요청
                 .then().log().all()
@@ -135,9 +148,21 @@ public class ApiTest {
 
         Long boardId = 1L;  // 테스트 환경에서 사용될 boardId 값 (이미 생성된 게시판 ID)
 
+        // 회원 생성 (writerId = 1L로 미리 등록된 회원)
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new CreatePostRequest("게시글1","가나라다", boardId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
+                .body(new CreateMemberRequest("loginid1234", "password", "testNick"))
+                .when()
+                .post("/members")
+                .then().log().all()
+                .statusCode(200);
+
+        //회원 ID 설정 (테스트 환경에서 사용될 writerId 값)
+        Long writerId = 1L; // 실제로는 테스트 중인 회원 ID를 설정해줘야 함
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new CreatePostRequest("게시글1","가나라다", boardId, writerId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
                 .when()
                 .post("/posts")  // POST 요청
                 .then().log().all()
@@ -146,7 +171,7 @@ public class ApiTest {
         // 2. 생성된 게시판의 ID를 사용하여, 게시판 이름을 수정하는 요청을 보냅니다.
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new CreatePostRequest("게시글이름수정1", "글 내용 수정",boardId))
+                .body(new CreatePostRequest("게시글이름수정1", "글 내용 수정",boardId, writerId))
                 .pathParam("postId", 1)  // 임시로 boardId 1을 사용
                 .when()
                 .put("/posts/{postId}")  // PUT 요청으로 게시판 수정
@@ -177,14 +202,28 @@ public class ApiTest {
 
         Long boardId = 1L;  // 테스트 환경에서 사용될 boardId 값 (이미 생성된 게시판 ID)
 
+        // 회원 생성 (writerId = 1L로 미리 등록된 회원)
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new CreatePostRequest("게시글1","가나라다", boardId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
+                .body(new CreateMemberRequest("loginid1234", "password", "testNick"))
+                .when()
+                .post("/members")
+                .then().log().all()
+                .statusCode(200);
+
+        //회원 ID 설정 (테스트 환경에서 사용될 writerId 값)
+        Long writerId = 1L; // 실제로는 테스트 중인 회원 ID를 설정해줘야 함
+
+        //게시글 생성
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new CreatePostRequest("게시글1","가나라다", boardId, writerId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
                 .when()
                 .post("/posts")  // POST 요청
                 .then().log().all()
                 .statusCode(200);  // 상태 코드가 200이어야 성공
 
+        //조회
         RestAssured
                 .given().log().all()
                 .pathParam("postId", 1)
@@ -206,14 +245,28 @@ public class ApiTest {
 
         Long boardId = 1L;  // 테스트 환경에서 사용될 boardId 값 (이미 생성된 게시판 ID)
 
+        // 회원 생성 (writerId = 1L로 미리 등록된 회원)
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new CreatePostRequest("게시글1","가나라다", boardId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
+                .body(new CreateMemberRequest("loginid1234", "password", "testNick"))
+                .when()
+                .post("/members")
+                .then().log().all()
+                .statusCode(200);
+
+        //회원 ID 설정 (테스트 환경에서 사용될 writerId 값)
+        Long writerId = 1L; // 실제로는 테스트 중인 회원 ID를 설정해줘야 함
+
+        //생성
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new CreatePostRequest("게시글1","가나라다", boardId, writerId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
                 .when()
                 .post("/posts")  // POST 요청
                 .then().log().all()
                 .statusCode(200);  // 상태 코드가 200이어야 성공
 
+        //삭제
         RestAssured
                 .given().log().all()
                 .pathParam("postId", 1)
@@ -235,9 +288,21 @@ public class ApiTest {
 
         Long boardId = 1L;  // 테스트 환경에서 사용될 boardId 값 (이미 생성된 게시판 ID)
 
+        // 회원 생성 (writerId = 1L로 미리 등록된 회원)
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new CreatePostRequest("게시글1","가나라다", boardId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
+                .body(new CreateMemberRequest("loginid1234", "password", "testNick"))
+                .when()
+                .post("/members")
+                .then().log().all()
+                .statusCode(200);
+
+        //회원 ID 설정 (테스트 환경에서 사용될 writerId 값)
+        Long writerId = 1L; // 실제로는 테스트 중인 회원 ID를 설정해줘야 함
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new CreatePostRequest("게시글1","가나라다", boardId, writerId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
                 .when()
                 .post("/posts")  // POST 요청
                 .then().log().all()
@@ -266,9 +331,21 @@ public class ApiTest {
 
         Long boardId = 1L;  // 테스트 환경에서 사용될 boardId 값 (이미 생성된 게시판 ID)
 
+        // 회원 생성 (writerId = 1L로 미리 등록된 회원)
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new CreatePostRequest("게시글1","가나라다", boardId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
+                .body(new CreateMemberRequest("loginid1234", "password", "testNick"))
+                .when()
+                .post("/members")
+                .then().log().all()
+                .statusCode(200);
+
+        //회원 ID 설정 (테스트 환경에서 사용될 writerId 값)
+        Long writerId = 1L; // 실제로는 테스트 중인 회원 ID를 설정해줘야 함
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new CreatePostRequest("게시글1","가나라다", boardId, writerId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
                 .when()
                 .post("/posts")  // POST 요청
                 .then().log().all()
@@ -308,9 +385,21 @@ public class ApiTest {
 
         Long boardId = 1L;  // 테스트 환경에서 사용될 boardId 값 (이미 생성된 게시판 ID)
 
+        // 회원 생성 (writerId = 1L로 미리 등록된 회원)
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new CreatePostRequest("게시글1","가나라다", boardId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
+                .body(new CreateMemberRequest("loginid1234", "password", "testNick"))
+                .when()
+                .post("/members")
+                .then().log().all()
+                .statusCode(200);
+
+        //회원 ID 설정 (테스트 환경에서 사용될 writerId 값)
+        Long writerId = 1L; // 실제로는 테스트 중인 회원 ID를 설정해줘야 함
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new CreatePostRequest("게시글1","가나라다", boardId, writerId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
                 .when()
                 .post("/posts")  // POST 요청
                 .then().log().all()

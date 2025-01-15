@@ -28,7 +28,6 @@ public class CommentService {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
         comment.setComment(request.comment());
 
-        commentRepository.save(comment);
         return comment;
     }
 

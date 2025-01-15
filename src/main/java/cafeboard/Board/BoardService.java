@@ -39,7 +39,7 @@ public class BoardService {
         Board boardToUpdate = boardRepository.findById(boardid).orElseThrow();
 
         boardToUpdate.setBoardName(request.name());
-        return boardRepository.save(boardToUpdate);
+        return boardToUpdate;
     }
 
     //조회(전체)
