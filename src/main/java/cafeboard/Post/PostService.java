@@ -37,7 +37,7 @@ public class PostService {
     }
 
     //목록조회(게시글id, 댓글 개수)
-    public List<PostResponse> fingAll(){
+    public List<PostResponse> findAll(){
         List <Post> posts = postRepository.findAll();
         return posts.stream()
                 .map(post -> new PostResponse(

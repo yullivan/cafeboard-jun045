@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cafeboard.Post.PostMapper">
+    <select id="findAll" resultType="cafeboard.Post.Post">
+        SELECT id, title, postcontent, created_at, updated_at
+        FROM post
+        <where>
+            <if test ="boardId != null">
+                and board_id = #{boardId}
+            </if>
+        </where>
+<!--        <if test="sort == RECENT">-->
+<!--            ORDER BY created_at DESC-->
+<!--        </if>-->
+<!--        <if test="sort == LIKE">-->
+<!--            ORDER BY like_count DESC-->
+<!--        </if>-->
+    </select>
+</mapper>
+
+

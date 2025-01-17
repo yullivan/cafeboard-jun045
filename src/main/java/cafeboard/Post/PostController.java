@@ -29,7 +29,7 @@ public class PostController {
     //목록조회
     @GetMapping("/posts")
     public List<PostResponse> findAllposts(){
-        return postService.fingAll();
+        return postService.findAll();
     }
 
     //상세조회

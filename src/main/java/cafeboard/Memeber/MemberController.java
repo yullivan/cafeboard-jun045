@@ -23,4 +23,12 @@ public class MemberController {
     public void delete(@PathVariable Long memberId){
         memberService.delete(memberId);
     }
+
+    //로그인
+    @PostMapping("/login")
+    public LoginResponse user(@RequestBody LoginRequest request){
+        LoginResponse member = memberService.login(request);
+
+        return null;
+    }
 }
