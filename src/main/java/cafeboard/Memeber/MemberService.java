@@ -35,9 +35,9 @@ public class MemberService {
         Member member = memberRepository.findByUsername(request.username())
                 .orElseThrow(() -> new IllegalArgumentException("ID 또는 PASSWORD 일치하지 않음"));
 
-        //회원이 입력한 비밀번호도 해쉬화해서 비교(아닐 경우 비교시 불일치만 나옴)
+        //회원이 입력한 비밀번호도 해쉬화해서 비교(아닐 경우 비교시 불일치만 나옴) -> member엔티티에 함수 만듦
         //string값이니까 equals로 비교
-       if (!member.getPassword().equals(SecurityUtils.sha256EncryptHex1(request.password()))){
+       if (!member.equalpassword(request.password())){
            throw new IllegalArgumentException("ID 또는 PASSWORD 일치하지 않음");
        }
 

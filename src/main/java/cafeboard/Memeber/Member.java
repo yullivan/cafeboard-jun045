@@ -1,5 +1,6 @@
 package cafeboard.Memeber;
 
+import cafeboard.SecurityUtils;
 import jakarta.persistence.*;
 
 //멤버:게시글 = 1:n
@@ -44,6 +45,11 @@ public class Member {
 
     public String getNickname() {
         return nickname;
+    }
+
+    //찾은 회원의 비밀번호와 클라이언트 전달한 비밀번호 비교 메소드 만듦
+    public boolean equalpassword(String password){
+        return this.password.equals(SecurityUtils.sha256EncryptHex1(password));
     }
 
 }

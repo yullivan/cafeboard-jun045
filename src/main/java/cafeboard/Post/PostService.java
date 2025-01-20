@@ -5,8 +5,8 @@ import cafeboard.Board.BoardRepository;
 import cafeboard.Comment.Comment;
 import cafeboard.Comment.CommentRepository;
 import cafeboard.Comment.CommentResponse;
-import cafeboard.Memeber.Member;
-import cafeboard.Memeber.MemberRepository;
+import cafeboard.JwtProvider;
+import cafeboard.Memeber.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,18 +21,28 @@ public class PostService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
+    private final LoginResponse loginResponse;
 
-    public PostService(PostRepository postRepository, BoardRepository boardRepository, CommentRepository commentRepository, MemberRepository memberRepository) {
+    private final JwtProvider jwtProvider;
+
+
+    public PostService(PostRepository postRepository, BoardRepository boardRepository, CommentRepository commentRepository, MemberRepository memberRepository, LoginResponse loginResponse, JwtProvider jwtProvider) {
         this.postRepository = postRepository;
         this.boardRepository = boardRepository;
         this.commentRepository = commentRepository;
         this.memberRepository = memberRepository;
+        this.loginResponse = loginResponse;
+
+        this.jwtProvider = jwtProvider;
     }
 
     //생성(게시판 있으면 게시글 생성 가능) + 회원인지 확인 후 추가
-    public void create(CreatePostRequest request){
+    public void create(CreatePostRequest request,String username){
         Board board = boardRepository.findById(request.boardId()).orElseThrow(() -> new IllegalArgumentException("게시판 찾을 수 없음"));
-        Member member = memberRepository.findById(request.writerId()).orElseThrow(()-> new IllegalArgumentException("회원 정보가 올바르지 않음"));
+        Member member = memberRepository.findByUsername(username).orElseThrow(()-> new IllegalArgumentException("회원 정보 찾을 수 없음"));
+
+        //회원 아이디와 토큰 속 유저아이디가 일치하는지 확인
+
         postRepository.save(new Post(request.title(),request.content(), board, member));
     }
 
@@ -75,9 +85,6 @@ public class PostService {
     public Post update(Long id, CreatePostRequest request){
         Post post = postRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 게시글"));
 
-        //작성한 회원과 일치하는지 확인
-//        if( post.getWriter().getId().equals())
-
         post.setTitle(request.title());
         post.setPostcontent(request.content());
 
@@ -85,8 +92,13 @@ public class PostService {
     }
 
     //삭제 (작성자인지 확인, 게시글 있는지 확인, 삭제)
-    public void delete(Long id){
+    public void delete(Long id,String username){
         Post post = postRepository.findById(id).orElseThrow( ()-> new IllegalArgumentException("존재하지 않는 게시물이므로 삭제 불가"));
-        postRepository.deleteById(id);
+        //작성한 회원 아이디와 토큰 속 유저아이디가 일치하는지 확인
+         if(!post.getWriter().getUsername().equals(username)){
+             throw new IllegalArgumentException("회원정보 일치하지 않음");
+         }
+         postRepository.deleteById(id);
     }
 }
+

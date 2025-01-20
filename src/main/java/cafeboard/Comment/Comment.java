@@ -18,6 +18,9 @@ public class Comment {
     @Column(nullable = false)
     private String comment;
 
+    @Column(nullable = false)
+    private String userid;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -31,9 +34,10 @@ public class Comment {
     protected Comment() {
     }
 
-    public Comment(String comment, Post post) {
+    public Comment(String comment, Post post, String userid) {
         this.comment = comment;
         this.post = post;
+        this.userid = userid;
     }
 
     public Long getId() {
@@ -42,6 +46,14 @@ public class Comment {
 
     public String getComment() {
         return comment;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public Comment(String userid) {
+        this.userid = userid;
     }
 
     public Post getPost() {
