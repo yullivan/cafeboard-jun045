@@ -24,12 +24,12 @@ public class CommentService {
         this.jwtProvider = jwtProvider;
     }
 
-    //생성(게시글 있으면 댓글 생성)
+    //생성(게시글 있고 회원이면 댓글 생성)
     public void create(CreateCommentRequest request, String username){
         Post post = postRepository.findById(request.postId()).orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
         Member member = memberRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("회원정보 찾을 수 없음"));
 
-        commentRepository.save(new Comment(request.comment(),request.userId(), member, post));
+        commentRepository.save(new Comment(request.comment(), post, member));
     }
 
     //수정
@@ -44,10 +44,9 @@ public class CommentService {
     //삭제
     public void delete(Long id, String username){
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("삭제할 댓글이 존재하지 않습니다."));
-        Member member = memberRepository.findById(id).orElseThrow();
 
-        if(!comment..equals(username)){
-            throw new IllegalArgumentException("회원정보 일치하지 않음");
+        if(!comment.getMember().getUsername().equals(username)){
+            throw new IllegalArgumentException("권한 없음");
         }
 
         commentRepository.deleteById(id);

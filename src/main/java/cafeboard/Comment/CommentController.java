@@ -46,7 +46,23 @@ public class CommentController {
 
     //삭제
     @DeleteMapping("/comments/{commentId}")
-    public void delete(@PathVariable Long commentId){
-        commentService.delete(commentId);
+    public void delete(@PathVariable Long commentId, @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken){
+        String token = null;
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            token = bearerToken.substring(7);
+        }
+
+        if (token == null) {
+            throw new IllegalArgumentException("로그인 정보가 유효하지 않습니다");
+        }
+
+        // 유효한 JWT 토큰인지 검증
+        if (jwtProvider.isValidToken(token) == false) {
+            throw new IllegalArgumentException("로그인 정보가 유효하지 않습니다");
+        }
+
+        String username = jwtProvider.getSubject(token);
+
+        commentService.delete(commentId,username);
     }
 }

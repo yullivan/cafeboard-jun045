@@ -20,7 +20,8 @@ public class PostController {
 
     //생성
     @PostMapping("/posts")
-    public void create(@RequestBody CreatePostRequest request, @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken){
+    public void create(@RequestBody CreatePostRequest request,
+                       @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken){
         String token = null;
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             token = bearerToken.substring(7);
@@ -62,7 +63,8 @@ public class PostController {
 
     //삭제
     @DeleteMapping("/posts/{postId}")
-    public void delete(@PathVariable Long postId, @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken){
+    public void delete(@PathVariable Long postId,
+                       @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken){
         String token = null;
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             token = bearerToken.substring(7);

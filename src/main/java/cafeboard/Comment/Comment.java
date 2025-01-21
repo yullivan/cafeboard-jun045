@@ -1,5 +1,6 @@
 package cafeboard.Comment;
 
+import cafeboard.Memeber.Member;
 import cafeboard.Post.Post;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,8 +19,9 @@ public class Comment {
     @Column(nullable = false)
     private String comment;
 
-    @Column(nullable = false)
-    private String userid;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Member member;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -34,10 +36,10 @@ public class Comment {
     protected Comment() {
     }
 
-    public Comment(String comment, Post post, String userid) {
+    public Comment(String comment, Post post, Member member) {
         this.comment = comment;
         this.post = post;
-        this.userid = userid;
+        this.member = member;
     }
 
     public Long getId() {
@@ -48,12 +50,8 @@ public class Comment {
         return comment;
     }
 
-    public String getUserid() {
-        return userid;
-    }
-
-    public Comment(String userid) {
-        this.userid = userid;
+    public Member getMember() {
+        return member;
     }
 
     public Post getPost() {

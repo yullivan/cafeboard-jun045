@@ -3,6 +3,8 @@ package cafeboard;
 import cafeboard.Board.CreateBoardRequest;
 import cafeboard.Comment.CreateCommentRequest;
 import cafeboard.Memeber.CreateMemberRequest;
+import cafeboard.Memeber.LoginRequest;
+import cafeboard.Memeber.LoginResponse;
 import cafeboard.Post.CreatePostRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ApiTest {
@@ -127,9 +130,23 @@ public class ApiTest {
         //회원 ID 설정 (테스트 환경에서 사용될 writerId 값)
         Long writerId = 1L; // 실제로는 테스트 중인 회원 ID를 설정해줘야 함
 
+        //로그인
+        LoginResponse loginResponse = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new LoginRequest("loginid1234","password1234"))
+                .when()
+                .post("/login")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(LoginResponse.class);
+
+
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new CreatePostRequest("게시글1","가나라다", boardId, writerId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginResponse.token())
+                .body(new CreatePostRequest("게시글1","가나라다", boardId))  // request body에 CreateBoardRequest를 JSON 형태로 변환
                 .when()
                 .post("/posts")  // POST 요청
                 .then().log().all()

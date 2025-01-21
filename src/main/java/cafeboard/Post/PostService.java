@@ -21,17 +21,15 @@ public class PostService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
-    private final LoginResponse loginResponse;
 
     private final JwtProvider jwtProvider;
 
 
-    public PostService(PostRepository postRepository, BoardRepository boardRepository, CommentRepository commentRepository, MemberRepository memberRepository, LoginResponse loginResponse, JwtProvider jwtProvider) {
+    public PostService(PostRepository postRepository, BoardRepository boardRepository, CommentRepository commentRepository, MemberRepository memberRepository, JwtProvider jwtProvider) {
         this.postRepository = postRepository;
         this.boardRepository = boardRepository;
         this.commentRepository = commentRepository;
         this.memberRepository = memberRepository;
-        this.loginResponse = loginResponse;
 
         this.jwtProvider = jwtProvider;
     }
@@ -42,7 +40,6 @@ public class PostService {
         Member member = memberRepository.findByUsername(username).orElseThrow(()-> new IllegalArgumentException("회원 정보 찾을 수 없음"));
 
         //회원 아이디와 토큰 속 유저아이디가 일치하는지 확인
-
         postRepository.save(new Post(request.title(),request.content(), board, member));
     }
 
